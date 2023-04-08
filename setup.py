@@ -5,7 +5,7 @@ with open("README.md") as f:
     long_description = f.read()
 
 setup(
-    name="mangadex_dl",
+    name="neosekai-api",
     version=VERSION,
     python_requires=">=3.10",
     install_requires=['lxml==4.9.2',
@@ -14,7 +14,7 @@ setup(
     author_email="jancyvinod415@gmail.com",
     packages=['neosekai_tl'],
     include_package_data=True,
-    url="https://github.com/john-erinjery/neosekai-tl/",
+    url="https://github.com/john-erinjery/neosekai-api/",
     license="MIT",
     description="An Unofficial API for NeoSekaiTranslations.com",
     long_description=long_description,
