@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from helper import heavy_translate
+from neosekai_api.helper import heavy_translate
 import json
 
 
@@ -101,10 +101,3 @@ class Novel:
                                         "chapter_name": name, "url": _url, "release_date": date}
                 n += 1
         return eval(json.dumps(content_dict, indent=4))
-
-
-# f = open('novel.html', encoding='utf-8')
-# html = f.read()
-# soup = BeautifulSoup(html, 'xml')
-# print(Novel(
-#     'https://www.neosekaitranslations.com/novel/jitsuimo/').get_index_page())

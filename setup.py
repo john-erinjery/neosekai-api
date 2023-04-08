@@ -1,18 +1,16 @@
 from setuptools import setup, find_packages
-from mangadex_dl.constants import VERSION
-
 with open("README.md") as f:
     long_description = f.read()
 
 setup(
     name="neosekai-api",
-    version=VERSION,
+    version='0.0.2',
     python_requires=">=3.10",
     install_requires=['lxml==4.9.2',
                       'beautifulsoup4>=4.11.2', 'requests==2.28.2'],
     author="John Erinjery",
     author_email="jancyvinod415@gmail.com",
-    packages=['neosekai_tl'],
+    packages=['neosekai_api'],
     include_package_data=True,
     url="https://github.com/john-erinjery/neosekai-api/",
     license="MIT",

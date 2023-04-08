@@ -1,4 +1,4 @@
-from novel import Novel
+from neosekai_api import Novel
 import requests
 from bs4 import BeautifulSoup
 
