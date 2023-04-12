@@ -1,10 +1,11 @@
-from setuptools import setup, find_packages
+from setuptools import setup
+from neosekai_api.constants import VERSION
 with open("README.md") as f:
     long_description = f.read()
 
 setup(
     name="neosekai-api",
-    version='0.0.2',
+    version=VERSION,
     python_requires=">=3.10",
     install_requires=['lxml==4.9.2',
                       'beautifulsoup4>=4.11.2', 'requests==2.28.2'],
