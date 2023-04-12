@@ -4,8 +4,13 @@ from bs4 import BeautifulSoup
 
 
 class NovelChapter:
+    '''
+    NovelChapter object
 
-    def __init__(self, _url) -> None:
+    :params _url : The Mangadex Chapter URL
+    '''
+
+    def __init__(self, _url: str) -> None:
         self.url = self.__urlformatter(_url)
         self.__response_object = requests.get(self.url, timeout=10)
         self.details = self.chapter_details()
@@ -14,6 +19,9 @@ class NovelChapter:
         self.release_date = self.details['release_date']
 
     def __urlformatter(self, _url):
+        """
+        formats url to standard form to be used in the program
+        """
         __url = ''
         if 'https://' not in _url:
             _url == 'https://' + _url
@@ -21,6 +29,17 @@ class NovelChapter:
             return _url
 
     def chapter_details(self):
+        """
+        returns chapter details : 
+
+        - chapter volume
+        - chapter name
+        - url
+        - chapter release date
+
+        In the given order in JSON format
+
+        """
         novel_url = self.url[:self.url.index('/', 43)]
         novel = Novel(novel_url)
         index_page = novel.get_index_page()
@@ -29,6 +48,22 @@ class NovelChapter:
                 return index_page[i]
 
     def get_chapter_content(self):
+        """
+        returns main chapter content in JSON format
+
+        JSON format:
+        ```json
+            {
+                "1" : {
+                    "type" : '...', "content" : '...'
+                }
+            }
+        ```
+        - each key will be a paragraph
+        - ```type```  can have a value of ```text``` for textual content
+        - ```type``` can have a value of ```img``` if the content is an image. link to the image will be provided in ```content```
+
+        """
         soup = BeautifulSoup(self.__response_object.text, 'lxml')
         div = soup.find('div', attrs={'class': 'text-left'})
         paras = div.find_all('p')

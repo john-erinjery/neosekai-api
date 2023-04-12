@@ -5,6 +5,9 @@ import json
 
 
 class Novel:
+    """
+    Novel Object
+    """
 
     def __init__(self, url):
         self.url = url
@@ -12,7 +15,9 @@ class Novel:
         self.novel_tags = self.__initialiser()
 
     def __initialiser(self):
-
+        '''
+        returns novel tags as ```dict```
+        '''
         soup = BeautifulSoup(self.response_object.content, 'lxml')
 
         # finding title
@@ -66,6 +71,11 @@ class Novel:
         return novel_tags
 
     def get_synopsis(self, fancy=True):
+        """
+        returns the synopsis text
+
+        fancy : if False, replaces all fancy punctuation marks with regular ones.
+        """
         soup = BeautifulSoup(self.response_object.content, 'lxml')
         synopsis = soup.find('div', attrs={
             'class': ['summary__content', 'show-more']}).text
@@ -76,6 +86,23 @@ class Novel:
             return heavy_translate(synopsis)
 
     def get_index_page(self):
+        """
+        returns the chapter list in JSON format
+
+        JSON : 
+        ```json
+            {
+                "1" : {
+                    "volume" : '...',
+                    "chapter_name" : '...',
+                    "url" : '...',
+                    "release_date" : '...'
+                },
+
+                "2" : {'...'}
+            }
+        ```
+        """
         url = 'https://www.neosekaitranslations.com/wp-admin/admin-ajax.php'
         soup = BeautifulSoup(self.response_object.content, 'lxml')
         data_id = soup.find(
