@@ -19,7 +19,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     classifiers=[
-        "Development Status :: 5 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Customer Service",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
