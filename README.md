@@ -1,4 +1,6 @@
-<h1 style="text-align:center;">neosekai-api</h1>
+<p align="center">
+<h1 style='font-size:38px;' align="center">neosekai-api</h1>
+</p>
 
 An Unoffical Python API for [neosekaitranslations.com](https://www.neosekaitranslations.com/)
 
