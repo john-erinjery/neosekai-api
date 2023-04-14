@@ -11,14 +11,14 @@ class Novel:
 
     def __init__(self, url):
         self.url = url
-        self.response_object = requests.get(self.url, timeout=10)
+        self._response_object = requests.get(self.url, timeout=10)
         self.novel_tags = self.__initialiser()
 
     def __initialiser(self):
         '''
         returns novel tags as ```dict```
         '''
-        soup = BeautifulSoup(self.response_object.content, 'lxml')
+        soup = BeautifulSoup(self._response_object.content, 'lxml')
 
         # finding title
         title = soup.find('title').text.split(' - NeoSekai')[0]
@@ -76,7 +76,7 @@ class Novel:
 
         fancy : if False, replaces all fancy punctuation marks with regular ones.
         """
-        soup = BeautifulSoup(self.response_object.content, 'lxml')
+        soup = BeautifulSoup(self._response_object.content, 'lxml')
         synopsis = soup.find('div', attrs={
             'class': ['summary__content', 'show-more']}).text
 
@@ -104,7 +104,7 @@ class Novel:
         ```
         """
         url = 'https://www.neosekaitranslations.com/wp-admin/admin-ajax.php'
-        soup = BeautifulSoup(self.response_object.content, 'lxml')
+        soup = BeautifulSoup(self._response_object.content, 'lxml')
         data_id = soup.find(
             'div', attrs={'id': 'manga-chapters-holder'})['data-id']
         data = {'action': 'manga_get_chapters', 'manga': data_id}

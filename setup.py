@@ -15,11 +15,11 @@ setup(
     include_package_data=True,
     url="https://github.com/john-erinjery/neosekai-api/",
     license="MIT",
-    description="An Unofficial API for NeoSekaiTranslations.com",
+    description="An Unoffical Python API for neosekaitranslations.com",
     long_description=long_description,
     long_description_content_type="text/markdown",
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Alpha",
         "Intended Audience :: Customer Service",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",

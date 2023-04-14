@@ -1,6 +1,7 @@
 from neosekai_api.novel import Novel
 import requests
 from bs4 import BeautifulSoup
+from neosekai_api.helper import heavy_translate
 
 
 class NovelChapter:
@@ -13,7 +14,6 @@ class NovelChapter:
     def __init__(self, _url: str) -> None:
         self.url = self.__urlformatter(_url)
         self.__response_object = requests.get(self.url, timeout=10)
-        self.details = self.chapter_details()
         self.volume = self.details['volume']
         self.name = self.details['chapter_name']
         self.release_date = self.details['release_date']
@@ -24,9 +24,9 @@ class NovelChapter:
         """
         __url = ''
         if 'https://' not in _url:
-            _url == 'https://' + _url
+            __url = 'https://' + _url
         else:
-            return _url
+            return __url
 
     def chapter_details(self):
         """
@@ -47,7 +47,7 @@ class NovelChapter:
             if index_page[i]['url'] == self.url:
                 return index_page[i]
 
-    def get_chapter_content(self):
+    def get_chapter_content(self, fancy=True):
         """
         returns main chapter content in JSON format
 
@@ -59,7 +59,7 @@ class NovelChapter:
                 }
             }
         ```
-        - each key will be a paragraph
+        - each key will be a paragraphs
         - ```type```  can have a value of ```text``` for textual content
         - ```type``` can have a value of ```img``` if the content is an image. link to the image will be provided in ```content```
 
@@ -79,4 +79,7 @@ class NovelChapter:
                 n += 1
             else:
                 continue
-        return content
+        if fancy:
+            return content
+        else:
+            return heavy_translate(content)
