@@ -12,21 +12,13 @@ class NovelChapter:
     '''
 
     def __init__(self, _url: str) -> None:
-        self.url = self.__urlformatter(_url)
+        self.url = _url
         self.__response_object = requests.get(self.url, timeout=10)
+        self.details = self.chapter_details()
         self.volume = self.details['volume']
         self.name = self.details['chapter_name']
         self.release_date = self.details['release_date']
 
-    def __urlformatter(self, _url):
-        """
-        formats url to standard form to be used in the program
-        """
-        __url = ''
-        if 'https://' not in _url:
-            __url = 'https://' + _url
-        else:
-            return __url
 
     def chapter_details(self):
         """
@@ -38,9 +30,10 @@ class NovelChapter:
         - chapter release date
 
         In the given order in JSON format
-
         """
-        novel_url = self.url[:self.url.index('/', 43)]
+        novel_url_ = self.url.split('neosekaitranslations.com/novel/')[-1]
+        novel_name = novel_url_[:novel_url_.index('/')]
+        novel_url = f"https://www.neosekaitranslations.com/novel/{novel_name}/"
         novel = Novel(novel_url)
         index_page = novel.get_index_page()
         for i in index_page:
@@ -72,7 +65,7 @@ class NovelChapter:
         for i in paras:
             if i.span != None:
                 content[str(n)] = {'type': 'text',
-                                   'content': i.span.text.strip()}
+                                   'content': i.span.text.strip() if fancy else heavy_translate(i.span.text.strip())}
                 n += 1
             elif i.img != None:
                 content[str(n)] = {'type': 'img', 'content': i.img['src']}
