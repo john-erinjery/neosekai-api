@@ -14,11 +14,6 @@ class NovelChapter:
     def __init__(self, _url: str) -> None:
         self.url = _url
         self.__response_object = requests.get(self.url, timeout=10)
-        self.details = self.chapter_details()
-        self.volume = self.details['volume']
-        self.name = self.details['chapter_name']
-        self.release_date = self.details['release_date']
-
 
     def chapter_details(self):
         """
@@ -72,7 +67,4 @@ class NovelChapter:
                 n += 1
             else:
                 continue
-        if fancy:
-            return content
-        else:
-            return heavy_translate(content)
+        return content

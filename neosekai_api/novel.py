@@ -1,8 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 from neosekai_api.helper import heavy_translate
-import json
-
 
 class Novel:
     """
@@ -12,9 +10,8 @@ class Novel:
     def __init__(self, url):
         self.url = url
         self._response_object = requests.get(self.url, timeout=10)
-        self.novel_tags = self.__initialiser()
 
-    def __initialiser(self):
+    def get_novel_tags(self):
         '''
         returns novel tags as ```dict```
         '''
@@ -101,30 +98,51 @@ class Novel:
 
                 "2" : {'...'}
             }
+        
         ```
+        - if novel is not categorised into volumes, volume will be an empty string
         """
+        content_dict = {}
         url = 'https://www.neosekaitranslations.com/wp-admin/admin-ajax.php'
-        soup = BeautifulSoup(self._response_object.content, 'lxml')
-        data_id = soup.find(
-            'div', attrs={'id': 'manga-chapters-holder'})['data-id']
+        soup_ = BeautifulSoup(self._response_object.content, 'lxml')
+        data_id = soup_.find(
+            'div', attrs={'id': ['manga-chapters-holder']})['data-id']
         data = {'action': 'manga_get_chapters', 'manga': data_id}
         soup_2 = BeautifulSoup(requests.post(url, data).content, 'lxml')
-        content_dict = {}
-        main_wrapper = soup_2.find('ul', attrs={'class': 'main version-chap'})
-        volumes_li = list(main_wrapper.find_all(
-            'li', recursive=False))
-        volumes_li.reverse()
-        n = 1
-        for i in volumes_li:
-            lines = list(i.find_all(
-                'li', attrs={'class': 'wp-manga-chapter'}))
+        li_with_children = list(soup_2.find_all('li', attrs={'class' : ['parent', 'has-child']}))
+
+        if li_with_children:
+            vol_list = []
+
+            for i in soup_2.find_all('a', attrs={'class' : ['has-child']}):
+                vol_num = i.text.strip().split()[1]
+                vol_list.append(int(vol_num))
+
+            if max(vol_list) != vol_list[0]:
+                pass
+            else:
+                li_with_children.reverse()
+            n = 1
+            for index,i in enumerate(li_with_children):
+                lines = list(i.find_all('li', attrs={'class' : ['wp-manga-chapter']}))
+                lines.reverse()
+                for j in lines:
+                    link = j.a['href']
+                    name = j.a.text.strip()
+                    date = j.span.text.strip()
+                    mini_dict = {'volume' : str(index + 1), 'chapter_name' : name, 'url' : link, 'release_date' : date}
+                    content_dict[str(n)] = mini_dict
+                    n += 1
+        else:
+            lines = list(soup_2.find_all('li', attrs={'class' : ['wp-manga-chapter']}))
             lines.reverse()
-            volume = i.a.text.strip()
+            n = 1
             for j in lines:
-                name = j.a.text.strip()
-                _url = j.a['href']
-                date = j.span.text.strip()
-                content_dict[f"{n}"] = {"volume": volume,
-                                        "chapter_name": name, "url": _url, "release_date": date}
-                n += 1
-        return eval(json.dumps(content_dict, indent=4))
+                    link = j.a['href']
+                    name = j.a.text.strip()
+                    date = j.span.text.strip()
+                    mini_dict = {'volume' : "", 'chapter_name' : heavy_translate(name), 'url' : link, 'release_date' : date}
+                    content_dict[str(n)] = mini_dict
+                    n += 1
+        
+        return content_dict
